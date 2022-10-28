@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import json
+import re
 
 # url = "https://health-diet.ru/table_calorie/?utm_source=leftMenu&utm_medium=table_calorie"
 #
@@ -11,17 +12,22 @@ import json
 
 # req = requests.get(url)
 
-with open('url_text.html', encoding='utf-8') as file_url:
-    src = file_url.read()
+# with open('url_text.html', encoding='utf-8') as file_url:
+#     src = file_url.read()
+#
+# soup = BeautifulSoup(src, "lxml")
+# all_products_href = soup.find_all(class_="mzr-tc-group-item-href")
+# all_category_dict = {}
+# for item in all_products_href:
+#     item_text = item.text
+#     item_href = "https://health-diet.ru" + item.get("href")
+#     print(f'{item_text}: {item_href}')
+#     all_category_dict[item_text] = item_href
 
-soup = BeautifulSoup(src, "lxml")
-all_products_href = soup.find_all(class_="mzr-tc-group-item-href")
-all_category_dict = {}
-for item in all_products_href:
-    item_text = item.text
-    item_href = "https://health-diet.ru" + item.get("href")
-    print(f'{item_text}: {item_href}')
-    all_category_dict[item_text] = item_href
+# with open("all_category_href.json", "w", encoding='utf-8') as file:
+#     json.dump(all_category_dict, file, indent=4, ensure_ascii=False)
 
-with open("all_category_href.json", "w", encoding='utf-8') as file:
-    json.dump(all_category_dict, file, indent=4, ensure_ascii=False)
+with open("all_category_href.json", encoding='utf-8') as file:
+    all_categories = json.load(file)
+    for item in all_categories.keys():
+        print(re.sub(r'\W*\s+', '_', item))
