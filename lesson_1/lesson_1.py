@@ -29,5 +29,9 @@ import re
 
 with open("all_category_href.json", encoding='utf-8') as file:
     all_categories = json.load(file)
-    for item in all_categories.keys():
-        print(re.sub(r'\W*\s+', '_', item))
+
+    redacted_json = {}
+    for item, value in all_categories.items():
+        redacted_json[re.sub(r'\W*\s+', '_', item)] = value
+        with open("all_category_href.json", "w", encoding='utf-8') as file_w:
+            json.dump(redacted_json, file_w, indent=4, ensure_ascii=False)
