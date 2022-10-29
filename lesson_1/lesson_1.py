@@ -5,10 +5,10 @@ import re
 
 # url = "https://health-diet.ru/table_calorie/?utm_source=leftMenu&utm_medium=table_calorie"
 #
-# headers = {
-#     "accept": "*/*",
-#     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
-# }
+headers = {
+    "accept": "*/*",
+    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
+}
 
 # req = requests.get(url)
 
@@ -27,11 +27,24 @@ import re
 # with open("all_category_href.json", "w", encoding='utf-8') as file:
 #     json.dump(all_category_dict, file, indent=4, ensure_ascii=False)
 
-with open("all_category_href.json", encoding='utf-8') as file:
-    all_categories = json.load(file)
+# with open("all_category_href.json", encoding='utf-8') as file:
+#     all_categories = json.load(file)
+#
+#     redacted_json = {}
+#     for item, value in all_categories.items():
+#         redacted_json[re.sub(r'\W*\s+', '_', item)] = value
+#         with open("all_category_href.json", "w", encoding='utf-8') as file_w:
+#             json.dump(redacted_json, file_w, indent=4, ensure_ascii=False)
 
-    redacted_json = {}
-    for item, value in all_categories.items():
-        redacted_json[re.sub(r'\W*\s+', '_', item)] = value
-        with open("all_category_href.json", "w", encoding='utf-8') as file_w:
-            json.dump(redacted_json, file_w, indent=4, ensure_ascii=False)
+with open("all_category_href.json", encoding='utf-8') as file_r:
+    all_categories = json.load(file_r)
+
+    count = 0
+    for category_name, category_href in all_categories.items():
+        req = requests.get(url=category_href, headers=headers)
+        scr = req.text
+
+    with open(f"E:\\Projects\\Lesson_prser\\data\\{count}_{category_name}.html", "w", encoding='utf-8') as file_w:
+        file_w.write(scr)
+
+    count += 1
