@@ -45,24 +45,38 @@ for category_name, category_href in all_categories.items():
         with open(f"E:\\Projects\\Lesson_prser\\data\\{count}_{category_name}.html", encoding='utf-8') as file_w:
             scr = file_w.read()
             soup = BeautifulSoup(scr, "lxml")
-            table_head = soup.find(class_="mzr-tc-group-table").find("tr").find_all("th")
-            priduct = table_head[0].text
-            calories = table_head[1].text
-            proteins = table_head[2].text
-            fats = table_head[3].text
-            carbohydrates = table_head[4].text
-            with open(f"E:\\Projects\\Lesson_prser\\data_csv\\{count}_{category_name}.csv", "w", encoding='utf-8') as file_w_csv:
-                writer = csv.writer(file_w_csv)
-                writer.writerow(
-                    (
-                        priduct,
-                        calories,
-                        proteins,
-                        fats,
-                        carbohydrates
+            # table_head = soup.find(class_="mzr-tc-group-table").find("tr").find_all("th")
 
-                    )
-                )
+            # priduct = table_head[0].text
+            # calories = table_head[1].text
+            # proteins = table_head[2].text
+            # fats = table_head[3].text
+            # carbohydrates = table_head[4].text
+            #
+            # with open(f"E:\\Projects\\Lesson_prser\\data_csv\\{count}_{category_name}.csv", "w", encoding='utf-8') as file_w_csv:
+            #     writer = csv.writer(file_w_csv)
+            #     writer.writerow(
+            #         (
+            #             priduct,
+            #             calories,
+            #             proteins,
+            #             fats,
+            #             carbohydrates
+            #
+            #         )
+            #     )
+
+            product_data = soup.find(class_="mzr-tc-group-table").find("tbody").find_all("tr")
+
+            for item in product_data:
+                product_tds = item.find_all("td")
+                title = product_tds[0].find("a").text
+                calories = product_tds[1].text
+                proteins = product_tds[2].text
+                fats = product_tds[3].text
+                carbohydrates = product_tds[4].text
+                print(proteins)
+
             count += 1
 
 
