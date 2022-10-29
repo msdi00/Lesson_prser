@@ -2,13 +2,13 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import re
+import csv
 
 # url = "https://health-diet.ru/table_calorie/?utm_source=leftMenu&utm_medium=table_calorie"
 #
-headers = {
-    "accept": "*/*",
-    "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
-}
+# headers = {
+#     "accept": "*/*",
+#     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
 
 # req = requests.get(url)
 
@@ -39,12 +39,32 @@ headers = {
 with open("all_category_href.json", encoding='utf-8') as file_r:
     all_categories = json.load(file_r)
 
-    count = 0
-    for category_name, category_href in all_categories.items():
-        req = requests.get(url=category_href, headers=headers)
-        scr = req.text
+count = 0
+for category_name, category_href in all_categories.items():
+    if count == 0:
+        with open(f"E:\\Projects\\Lesson_prser\\data\\{count}_{category_name}.html", encoding='utf-8') as file_w:
+            scr = file_w.read()
+            soup = BeautifulSoup(scr, "lxml")
+            table_head = soup.find(class_="mzr-tc-group-table").find("tr").find_all("th")
+            priduct = table_head[0].text
+            calories = table_head[1].text
+            proteins = table_head[2].text
+            fats = table_head[3].text
+            carbohydrates = table_head[4].text
+            with open(f"E:\\Projects\\Lesson_prser\\data_csv\\{count}_{category_name}.csv", "w", encoding='utf-8') as file_w_csv:
+                writer = csv.writer(file_w_csv)
+                writer.writerow(
+                    (
+                        priduct,
+                        calories,
+                        proteins,
+                        fats,
+                        carbohydrates
 
-    with open(f"E:\\Projects\\Lesson_prser\\data\\{count}_{category_name}.html", "w", encoding='utf-8') as file_w:
-        file_w.write(scr)
+                    )
+                )
+            count += 1
 
-    count += 1
+
+
+
